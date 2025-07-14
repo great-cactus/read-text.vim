@@ -82,10 +82,21 @@ function! s:on_complete(result) abort
   endif
 endfunction
 
+" <Plug>マッピング定義
+nnoremap <silent> <Plug>(read-text-from-cursor) :ReadFromCursor<CR>
+vnoremap <silent> <Plug>(read-text-selection) :ReadSelection<CR>
+nnoremap <silent> <Plug>(read-text-line) :ReadLine<CR>
+nnoremap <silent> <Plug>(read-text-check-connection) :ReadTextCheckConnection<CR>
+
+" 非同期版<Plug>マッピング
+nnoremap <silent> <Plug>(read-text-from-cursor-async) :ReadFromCursorAsync<CR>
+vnoremap <silent> <Plug>(read-text-selection-async) :ReadSelectionAsync<CR>
+nnoremap <silent> <Plug>(read-text-line-async) :ReadLineAsync<CR>
+
 " 推奨キーマッピング（ユーザーが有効にする場合）
 if get(g:, 'read_text_enable_default_mappings', 0)
-  nnoremap <leader>rs :ReadFromCursor<CR>
-  vnoremap <leader>rs :ReadSelection<CR>
-  nnoremap <leader>rx :echo "Read text stop is not implemented yet"<CR>
-  nnoremap <leader>rl :ReadLine<CR>
+  nmap <leader>rs <Plug>(read-text-from-cursor)
+  vmap <leader>rs <Plug>(read-text-selection)
+  nmap <leader>rl <Plug>(read-text-line)
+  nmap <leader>rc <Plug>(read-text-check-connection)
 endif

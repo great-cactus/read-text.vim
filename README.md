@@ -75,17 +75,41 @@ use {
 :ReadLine 3
 ```
 
-### 推奨キーマッピング
+### キーマッピング
+
+#### <Plug>マッピング（推奨）
 
 ```vim
-" デフォルトマッピングを有効にする
-let g:read_text_enable_default_mappings = 1
+" 基本機能
+nmap <leader>rs <Plug>(read-text-from-cursor)
+vmap <leader>rs <Plug>(read-text-selection)
+nmap <leader>rl <Plug>(read-text-line)
+nmap <leader>rc <Plug>(read-text-check-connection)
 
-" または手動で設定
-nnoremap <leader>rs :ReadFromCursor<CR>
-vnoremap <leader>rs :ReadSelection<CR>
-nnoremap <leader>rl :ReadLine<CR>
+" 非同期版
+nmap <leader>as <Plug>(read-text-from-cursor-async)
+vmap <leader>as <Plug>(read-text-selection-async)
+nmap <leader>al <Plug>(read-text-line-async)
 ```
+
+#### デフォルトマッピング
+
+```vim
+" 自動的にデフォルトマッピングを有効にする
+let g:read_text_enable_default_mappings = 1
+```
+
+#### 利用可能な<Plug>マッピング
+
+| <Plug>マッピング | 機能 |
+|------------------|------|
+| `<Plug>(read-text-from-cursor)` | カーソル位置以下を読み上げ |
+| `<Plug>(read-text-selection)` | Visual選択範囲を読み上げ |
+| `<Plug>(read-text-line)` | 現在行を読み上げ |
+| `<Plug>(read-text-check-connection)` | VOICEVOX接続確認 |
+| `<Plug>(read-text-from-cursor-async)` | カーソル位置以下を非同期読み上げ |
+| `<Plug>(read-text-selection-async)` | Visual選択範囲を非同期読み上げ |
+| `<Plug>(read-text-line-async)` | 現在行を非同期読み上げ |
 
 ## 設定項目
 
