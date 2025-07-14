@@ -145,13 +145,34 @@ let g:read_text_auto_cleanup = 1
 ### 音声再生設定
 
 ```vim
-" 音声再生方式（デフォルト: deno_audio）
-let g:read_text_audio_backend = 'deno_audio'
+" 音声再生方式（デフォルト: aplay）
+let g:read_text_audio_backend = 'aplay'
+
+" aplayコマンドの設定
+let g:read_text_aplay_command = 'aplay'
+let g:read_text_aplay_options = '-q'
 
 " テキスト分割閾値（デフォルト: 50行）
 let g:read_text_split_threshold = 50
 ```
 ## トラブルシューティング
+
+### denopsエラー
+
+もしdenopsの初期化でエラーが発生する場合：
+
+```vim
+" Vim/Neovimを再起動
+:qa
+```
+
+### deno_audioエラー
+
+deno_audioライブラリでエラーが発生する場合、aplayを使用してください：
+
+```vim
+let g:read_text_audio_backend = 'aplay'
+```
 
 ### VOICEVOX接続エラー
 
@@ -165,7 +186,8 @@ let g:read_text_split_threshold = 50
 
 1. VOICEVOXサーバーが起動していることを確認
 2. 音声デバイスが正常に動作していることを確認
-3. 一時ディレクトリの書き込み権限を確認
+3. aplayコマンドが利用可能であることを確認
+4. 一時ディレクトリの書き込み権限を確認
 
 ### パフォーマンスの問題
 

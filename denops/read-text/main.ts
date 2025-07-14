@@ -2,7 +2,7 @@ import type { Denops } from "https://deno.land/x/denops_std@v6.4.0/mod.ts";
 import * as fn from "https://deno.land/x/denops_std@v6.4.0/function/mod.ts";
 import * as vars from "https://deno.land/x/denops_std@v6.4.0/variable/mod.ts";
 import { batch } from "https://deno.land/x/denops_std@v6.4.0/batch/mod.ts";
-import { play } from "https://deno.land/x/audio@0.2.0/mod.ts";
+// import { play } from "https://deno.land/x/audio@0.2.0/mod.ts";
 
 interface VoicevoxConfig {
   url: string;
@@ -138,10 +138,12 @@ class AudioPlayer {
 
   private async playWithDenoAudio(filePath: string): Promise<void> {
     try {
-      await play(filePath);
-    } catch (error) {
-      console.error("deno_audio playback failed:", error);
+      // deno_audioが利用できない場合はaplayにフォールバック
+      console.warn("deno_audio is not available, falling back to aplay");
       await this.playWithAplay(filePath);
+    } catch (error) {
+      console.error("Audio playback failed:", error);
+      throw error;
     }
   }
 
@@ -314,9 +316,7 @@ export async function main(denops: Denops): Promise<void> {
     },
   };
 
-  await denops.cmd(`
-    augroup read-text
-      autocmd!
-    augroup END
-  `);
+  await denops.cmd("augroup read_text_denops");
+  await denops.cmd("autocmd!");
+  await denops.cmd("augroup END");
 }

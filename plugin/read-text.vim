@@ -33,7 +33,7 @@ if !exists('g:read_text_auto_cleanup')
 endif
 
 if !exists('g:read_text_audio_backend')
-  let g:read_text_audio_backend = 'deno_audio'
+  let g:read_text_audio_backend = 'aplay'
 endif
 
 if !exists('g:read_text_aplay_command')
