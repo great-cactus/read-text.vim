@@ -145,10 +145,10 @@ let g:read_text_auto_cleanup = 1
 ### 音声再生設定
 
 ```vim
-" 音声再生方式（デフォルト: aplay）
-let g:read_text_audio_backend = 'aplay'
+" 音声再生方式（デフォルト: deno_audio）
+let g:read_text_audio_backend = 'deno_audio'
 
-" aplayコマンドの設定
+" aplayコマンドの設定（フォールバック用）
 let g:read_text_aplay_command = 'aplay'
 let g:read_text_aplay_options = '-q'
 
@@ -168,10 +168,25 @@ let g:read_text_split_threshold = 50
 
 ### deno_audioエラー
 
-deno_audioライブラリでエラーが発生する場合、aplayを使用してください：
+deno_audioライブラリでエラーが発生する場合の対処法：
 
+#### WSL環境の場合
+```bash
+# WSLgの確認
+echo $PULSE_SERVER
+ls -la /mnt/wslg/PulseServer
+
+# WSLの再起動
+wsl --shutdown
+```
+
+#### 一般的な対処法
 ```vim
+" aplayにフォールバック
 let g:read_text_audio_backend = 'aplay'
+
+" 詳細な実行（デバッグ用）
+:ReadTextCheckConnection
 ```
 
 ### VOICEVOX接続エラー

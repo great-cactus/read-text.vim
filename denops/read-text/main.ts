@@ -2,7 +2,7 @@ import type { Denops } from "https://deno.land/x/denops_std@v6.4.0/mod.ts";
 import * as fn from "https://deno.land/x/denops_std@v6.4.0/function/mod.ts";
 import * as vars from "https://deno.land/x/denops_std@v6.4.0/variable/mod.ts";
 import { batch } from "https://deno.land/x/denops_std@v6.4.0/batch/mod.ts";
-// import { play } from "https://deno.land/x/audio@0.2.0/mod.ts";
+import { play } from "https://deno.land/x/audio@0.2.0/mod.ts";
 
 interface VoicevoxConfig {
   url: string;
@@ -100,7 +100,7 @@ class AudioPlayer {
 
   async playAudio(audioBuffer: ArrayBuffer): Promise<void> {
     const tempPath = await this.saveToTempFile(audioBuffer);
-    
+
     try {
       if (this.config.audioBackend === "deno_audio") {
         await this.playWithDenoAudio(tempPath);
@@ -119,10 +119,10 @@ class AudioPlayer {
     const timestamp = Date.now();
     const filename = `${this.config.filePrefix}${timestamp}.wav`;
     const tempPath = `${this.config.tempDir}/${filename}`;
-    
+
     const uint8Array = new Uint8Array(audioBuffer);
     await Deno.writeFile(tempPath, uint8Array);
-    
+
     return tempPath;
   }
 
@@ -138,12 +138,42 @@ class AudioPlayer {
 
   private async playWithDenoAudio(filePath: string): Promise<void> {
     try {
-      // deno_audioが利用できない場合はaplayにフォールバック
-      console.warn("deno_audio is not available, falling back to aplay");
-      await this.playWithAplay(filePath);
+      // WSL環境での音声設定チェック
+      await this.checkWSLAudioEnvironment();
+      
+      // deno_audioで音声再生を試行
+      await play(filePath);
     } catch (error) {
-      console.error("Audio playback failed:", error);
-      throw error;
+      console.warn("deno_audio playback failed, falling back to aplay:", error);
+      await this.playWithAplay(filePath);
+    }
+  }
+
+  private async checkWSLAudioEnvironment(): Promise<void> {
+    // WSL環境かどうかチェック
+    const isWSL = Deno.env.get("WSL_DISTRO_NAME") !== undefined;
+    
+    if (isWSL) {
+      // WSLgのPulseAudioサーバーの設定を確認
+      const pulseServer = Deno.env.get("PULSE_SERVER");
+      
+      if (!pulseServer) {
+        console.warn("WSL環境でPULSE_SERVER環境変数が設定されていません");
+        console.warn("WSLgが正しく設定されているか確認してください");
+        
+        // WSLgのデフォルト設定を試行
+        Deno.env.set("PULSE_SERVER", "/mnt/wslg/PulseServer");
+      }
+      
+      // WSLgのPulseServerソケットが存在するかチェック
+      try {
+        const pulseServerPath = pulseServer || "/mnt/wslg/PulseServer";
+        await Deno.stat(pulseServerPath);
+        console.log("WSLg PulseServer found:", pulseServerPath);
+      } catch {
+        console.warn("WSLg PulseServerが見つかりません。音声再生に問題が発生する可能性があります");
+        console.warn("WSLを再起動してください: wsl --shutdown");
+      }
     }
   }
 
@@ -153,7 +183,7 @@ class AudioPlayer {
       stdout: "null",
       stderr: "null",
     });
-    
+
     const { success } = await command.output();
     if (!success) {
       throw new Error("aplay command failed");
