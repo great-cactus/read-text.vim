@@ -1,7 +1,7 @@
 import type { Denops } from "https://deno.land/x/denops_std@v6.4.0/mod.ts";
 import * as fn from "https://deno.land/x/denops_std@v6.4.0/function/mod.ts";
 import * as vars from "https://deno.land/x/denops_std@v6.4.0/variable/mod.ts";
-import { batch } from "https://deno.land/x/denops_std@v6.4.0/batch/mod.ts";
+import { batch, collect } from "https://deno.land/x/denops_std@v6.4.0/batch/mod.ts";
 import { play } from "https://deno.land/x/audio@0.2.0/mod.ts";
 
 interface VoicevoxConfig {
@@ -288,13 +288,12 @@ export async function main(denops: Denops): Promise<void> {
         const config = await getConfig();
         const engine = new ReadTextEngine(config);
 
-        const [startLine, endLine, startCol, endCol] = await batch(denops, async (denops) => {
-          const startLine = await fn.line(denops, "'<");
-          const endLine = await fn.line(denops, "'>");
-          const startCol = await fn.col(denops, "'<");
-          const endCol = await fn.col(denops, "'>");
-          return [startLine, endLine, startCol, endCol];
-        });
+        const [startLine, endLine, startCol, endCol] = await collect(denops, (denops) => [
+          fn.line(denops, "'<"),
+          fn.line(denops, "'>"),
+          fn.col(denops, "'<"),
+          fn.col(denops, "'>")
+        ]);
 
         let text = "";
         if (startLine === endLine) {
