@@ -263,11 +263,10 @@ export async function main(denops: Denops): Promise<void> {
         const config = await getConfig();
         const engine = new ReadTextEngine(config);
 
-        const [currentLine, lastLine] = await batch(denops, async (denops) => {
-          const currentLine = await fn.line(denops, ".");
-          const lastLine = await fn.line(denops, "$");
-          return [currentLine, lastLine];
-        });
+        const [currentLine, lastLine] = await collect(denops, (denops) => [
+          fn.line(denops, "."),
+          fn.line(denops, "$")
+        ]);
 
         const lines = [];
         for (let i = currentLine; i <= lastLine; i++) {
