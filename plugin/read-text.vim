@@ -55,9 +55,9 @@ command! -nargs=? ReadLine call denops#request('read-text', 'readLine', [<q-args
 command! ReadTextCheckConnection call <SID>check_connection()
 
 " 非同期版コマンド
-command! -nargs=? ReadFromCursorAsync call denops#request_async('read-text', 'readFromCursor', [<q-args>], function('<SID>on_complete'))
-command! -nargs=? -range ReadSelectionAsync call denops#request_async('read-text', 'readSelection', [<q-args>], function('<SID>on_complete'))
-command! -nargs=? ReadLineAsync call denops#request_async('read-text', 'readLine', [<q-args>], function('<SID>on_complete'))
+command! -nargs=? ReadFromCursorAsync call denops#request_async('read-text', 'readFromCursor', [<q-args>], { v -> s:on_complete(v) }, { e -> s:on_error(e) })
+command! -nargs=? -range ReadSelectionAsync call denops#request_async('read-text', 'readSelection', [<q-args>], { v -> s:on_complete(v) }, { e -> s:on_error(e) })
+command! -nargs=? ReadLineAsync call denops#request_async('read-text', 'readLine', [<q-args>], { v -> s:on_complete(v) }, { e -> s:on_error(e) })
 
 " VOICEVOX接続確認
 function! s:check_connection() abort
@@ -73,13 +73,14 @@ endfunction
 
 " 非同期完了コールバック
 function! s:on_complete(result) abort
-  if type(a:result) == type({}) && has_key(a:result, 'error')
-    echohl ErrorMsg
-    echo 'Read text failed: ' . a:result.error
-    echohl None
-  else
-    echo 'Read text completed'
-  endif
+  echo 'Read text completed'
+endfunction
+
+" 非同期エラーコールバック
+function! s:on_error(error) abort
+  echohl ErrorMsg
+  echo 'Read text failed: ' . string(a:error)
+  echohl None
 endfunction
 
 " <Plug>マッピング定義
