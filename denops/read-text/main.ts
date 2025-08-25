@@ -51,14 +51,26 @@ class VoicevoxClient {
   }
 
   async createAudioQuery(text: string, speakerId?: number): Promise<AudioQuery> {
+    if (!text || text.trim().length === 0) {
+      throw new Error("VOICEVOX audio_query failed: Text is empty or contains only whitespace");
+    }
+
     const sid = speakerId ?? this.config.speakerId;
+    const formData = new FormData();
+    formData.append('text', text);
+    formData.append('speaker', sid.toString());
+
     const response = await fetch(
-      `${this.config.url}/audio_query?text=${encodeURIComponent(text)}&speaker=${sid}`,
-      { method: "POST" }
+      `${this.config.url}/audio_query`,
+      {
+        method: "POST",
+        body: formData
+      }
     );
 
     if (!response.ok) {
-      throw new Error(`VOICEVOX audio_query failed: ${response.statusText}`);
+      const errorText = await response.text().catch(() => "Unknown error");
+      throw new Error(`VOICEVOX audio_query failed: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
     return await response.json();
@@ -79,7 +91,8 @@ class VoicevoxClient {
     );
 
     if (!response.ok) {
-      throw new Error(`VOICEVOX synthesis failed: ${response.statusText}`);
+      const errorText = await response.text().catch(() => "Unknown error");
+      throw new Error(`VOICEVOX synthesis failed: ${response.status} ${response.statusText} - ${errorText}`);
     }
 
     return await response.arrayBuffer();
