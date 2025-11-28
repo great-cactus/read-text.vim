@@ -65,15 +65,15 @@ export class VoicevoxProvider implements TTSProvider {
       ? parseInt(options.voice, 10)
       : this.config.voicevoxSpeaker;
 
-    const formData = new FormData();
-    formData.append('text', text);
-    formData.append('speaker', speakerId.toString());
+    const params = new URLSearchParams({
+      text: text,
+      speaker: speakerId.toString()
+    });
 
     const response = await fetch(
-      `${this.config.voicevoxUrl}/audio_query`,
+      `${this.config.voicevoxUrl}/audio_query?${params}`,
       {
-        method: "POST",
-        body: formData
+        method: "POST"
       }
     );
 
