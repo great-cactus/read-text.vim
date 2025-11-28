@@ -4,22 +4,60 @@ endif
 let g:loaded_read_text = 1
 
 " デフォルト設定
+
+" TTS provider selection (default: voicevox)
+if !exists('g:read_text_tts_provider')
+  let g:read_text_tts_provider = 'voicevox'
+endif
+
+" VOICEVOX settings
 if !exists('g:read_text_voicevox_url')
   let g:read_text_voicevox_url = 'http://localhost:50021'
 endif
 
-if !exists('g:read_text_speaker_id')
-  let g:read_text_speaker_id = 3
+if !exists('g:read_text_voicevox_speaker')
+  let g:read_text_voicevox_speaker = 3
 endif
 
-if !exists('g:read_text_speed_scale')
-  let g:read_text_speed_scale = 1.0
+" Backward compatibility for old variable name
+if exists('g:read_text_speaker_id') && !exists('g:read_text_voicevox_speaker')
+  let g:read_text_voicevox_speaker = g:read_text_speaker_id
 endif
 
-if !exists('g:read_text_pitch_scale')
-  let g:read_text_pitch_scale = 0.0
+" espeak settings
+if !exists('g:read_text_espeak_voice')
+  let g:read_text_espeak_voice = 'en'
 endif
 
+if !exists('g:read_text_espeak_variant')
+  " Voice variant: 'm1'-'m7' (male), 'f1'-'f4' (female), or '' (default)
+  let g:read_text_espeak_variant = ''
+endif
+
+if !exists('g:read_text_espeak_command')
+  let g:read_text_espeak_command = 'espeak'
+endif
+
+" Common settings (normalized values)
+if !exists('g:read_text_speed')
+  let g:read_text_speed = 1.0
+endif
+
+" Backward compatibility for old variable name
+if exists('g:read_text_speed_scale') && !exists('g:read_text_speed')
+  let g:read_text_speed = g:read_text_speed_scale
+endif
+
+if !exists('g:read_text_pitch')
+  let g:read_text_pitch = 0.0
+endif
+
+" Backward compatibility for old variable name
+if exists('g:read_text_pitch_scale') && !exists('g:read_text_pitch')
+  let g:read_text_pitch = g:read_text_pitch_scale
+endif
+
+" File management
 if !exists('g:read_text_temp_dir')
   let g:read_text_temp_dir = './.tmp'
 endif
@@ -32,18 +70,12 @@ if !exists('g:read_text_auto_cleanup')
   let g:read_text_auto_cleanup = 1
 endif
 
+" Audio playback
 if !exists('g:read_text_audio_backend')
   let g:read_text_audio_backend = 'deno_audio'
 endif
 
-if !exists('g:read_text_aplay_command')
-  let g:read_text_aplay_command = 'aplay'
-endif
-
-if !exists('g:read_text_aplay_options')
-  let g:read_text_aplay_options = '-q'
-endif
-
+" Text processing
 if !exists('g:read_text_split_threshold')
   let g:read_text_split_threshold = 50
 endif
