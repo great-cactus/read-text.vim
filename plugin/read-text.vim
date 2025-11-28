@@ -38,6 +38,27 @@ if !exists('g:read_text_espeak_command')
   let g:read_text_espeak_command = 'espeak'
 endif
 
+" MeloTTS settings
+if !exists('g:read_text_melo_language')
+  " Language: EN, JP, ES, FR, CN, KR
+  let g:read_text_melo_language = 'EN'
+endif
+
+if !exists('g:read_text_melo_speaker')
+  " Speaker: EN-US, EN-BR, EN-AU, EN-INDIA, JP, etc.
+  let g:read_text_melo_speaker = 'EN-US'
+endif
+
+if !exists('g:read_text_melo_device')
+  " Device: auto, cpu, cuda
+  let g:read_text_melo_device = 'auto'
+endif
+
+if !exists('g:read_text_melo_python')
+  " Python command: python, python3
+  let g:read_text_melo_python = 'python3'
+endif
+
 " Common settings (normalized values)
 if !exists('g:read_text_speed')
   let g:read_text_speed = 1.0
@@ -72,7 +93,7 @@ endif
 
 " Audio playback
 if !exists('g:read_text_audio_backend')
-  let g:read_text_audio_backend = 'deno_audio'
+  let g:read_text_audio_backend = 'aplay'
 endif
 
 " Text processing

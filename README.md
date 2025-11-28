@@ -1,6 +1,6 @@
 # read-text.vim
 
-Vim/Neovim内でテキストを音声読み上げするプラグイン
+Vim/Neovim内でテキストを音声読み上げするプラグイン（VOICEVOX / espeak / MeloTTS対応）
 
 ## 概要
 
@@ -9,6 +9,7 @@ Vim/Neovim内でテキストを音声読み上げするプラグイン
 複数のTTSエンジンに対応しており,環境に応じて選択できます:
 - **VOICEVOX**: 高品質な日本語音声合成（サーバー起動が必要）
 - **espeak/espeak-ng**: 軽量で多言語対応のTTS（コマンドライン実行）
+- **MeloTTS**: 高品質で多言語対応のTTS（Python API経由）
 
 ## 主要機能
 
@@ -18,7 +19,7 @@ Vim/Neovim内でテキストを音声読み上げするプラグイン
 - **非同期処理**: 読み上げ中もVimの操作が可能
 - **自動分割処理**: 長いテキストを自動的に分割して処理
 - **多彩な設定**: 話者,速度,ピッチなどをカスタマイズ可能
-- **複数TTS対応**: VOICEVOX, espeakから選択可能
+- **複数TTS対応**: VOICEVOX, espeak, MeloTTSから選択可能
 
 ## 必要要件
 
@@ -32,6 +33,7 @@ Vim/Neovim内でテキストを音声読み上げするプラグイン
 
 - [VOICEVOX](https://voicevox.hiroshiba.jp/) サーバー（高品質な日本語音声）
 - espeak または espeak-ng（軽量・多言語対応）
+- [MeloTTS](https://github.com/myshell-ai/MeloTTS)（高品質・多言語対応、Python必須）
 
 ## インストール
 
@@ -98,6 +100,21 @@ choco install espeak
 
 # または公式サイトからダウンロード
 # http://espeak.sourceforge.net/
+```
+
+#### MeloTTS
+
+**Python環境が必要です:**
+```bash
+# MeloTTSのインストール
+pip install git+https://github.com/myshell-ai/MeloTTS.git
+
+# または、ローカルでクローンしてインストール
+git clone https://github.com/myshell-ai/MeloTTS.git
+cd MeloTTS
+pip install -e .
+
+# 必要なモデルのダウンロードは初回実行時に自動で行われます
 ```
 
 ## 使用方法
@@ -190,6 +207,27 @@ let g:read_text_espeak_variant = 'f2'
 let g:read_text_espeak_command = 'espeak'  " または 'espeak-ng'
 ```
 
+### MeloTTS設定
+
+```vim
+" 言語（デフォルト: 'EN'）
+" 対応言語: EN (英語), JP (日本語), ES (スペイン語), FR (フランス語), CN (中国語), KR (韓国語)
+let g:read_text_melo_language = 'EN'
+
+" スピーカー（デフォルト: 'EN-US'）
+" 英語: EN-US, EN-BR, EN-AU, EN-INDIA
+" 日本語: JP
+" その他の言語も対応（MeloTTSドキュメント参照）
+let g:read_text_melo_speaker = 'EN-US'
+
+" デバイス（デフォルト: 'auto'）
+" auto (GPUがあれば使用), cpu, cuda
+let g:read_text_melo_device = 'auto'
+
+" Pythonコマンド（デフォルト: 'python3'）
+let g:read_text_melo_python = 'python3'
+```
+
 ### 共通設定（正規化された値）
 
 ```vim
@@ -264,6 +302,37 @@ let g:read_text_espeak_voice = 'ja'
 let g:read_text_espeak_variant = 'm3'  " 男性の声
 let g:read_text_speed = 0.9            " 少し遅め
 let g:read_text_pitch = -0.1           " 少し低め
+
+" キーマッピング
+nmap <leader>rs <Plug>(read-text-from-cursor)
+vmap <leader>rs <Plug>(read-text-selection)
+```
+
+### MeloTTS使用（英語文書, アメリカ英語）
+
+```vim
+" MeloTTSを使用
+let g:read_text_tts_provider = 'melo'
+let g:read_text_melo_language = 'EN'
+let g:read_text_melo_speaker = 'EN-US'
+let g:read_text_melo_device = 'auto'   " GPUがあれば使用
+let g:read_text_speed = 1.0
+
+" キーマッピング
+nmap <leader>rs <Plug>(read-text-from-cursor)
+vmap <leader>rs <Plug>(read-text-selection)
+```
+
+### MeloTTS使用（日本語文書）
+
+```vim
+" MeloTTSで日本語
+let g:read_text_tts_provider = 'melo'
+let g:read_text_melo_language = 'JP'
+let g:read_text_melo_speaker = 'JP'
+let g:read_text_melo_device = 'cpu'    " CPU使用
+let g:read_text_melo_python = 'python3'
+let g:read_text_speed = 1.1            " 少し速め
 
 " キーマッピング
 nmap <leader>rs <Plug>(read-text-from-cursor)
@@ -353,11 +422,42 @@ espeak-ng --voices
 let g:read_text_espeak_command = 'espeak-ng'
 ```
 
+### MeloTTS関連エラー
+
+#### MeloTTSがインストールされているか確認
+
+```bash
+# Pythonで確認
+python3 -c "from melo.api import TTS; print('MeloTTS is installed')"
+```
+
+#### 初回実行時のモデルダウンロード
+
+初回実行時、MeloTTSは必要なモデルを自動的にダウンロードします。インターネット接続を確認してください。
+
+#### Pythonコマンドの確認
+
+システムによってはPythonコマンドが異なる場合があります:
+
+```vim
+" python3が使えない場合
+let g:read_text_melo_python = 'python'
+```
+
+#### GPU/CUDA関連エラー
+
+CUDAエラーが発生する場合、CPUを使用するように設定:
+
+```vim
+let g:read_text_melo_device = 'cpu'
+```
+
 ### 音声が再生されない
 
 1. TTSエンジンが正しく設定されていることを確認
    - VOICEVOX: サーバーが起動していることを確認
    - espeak: コマンドがインストールされていることを確認
+   - MeloTTS: Pythonとライブラリがインストールされていることを確認
 2. 音声デバイスが正常に動作していることを確認
 3. 一時ディレクトリの書き込み権限を確認
 

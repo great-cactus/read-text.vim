@@ -13,7 +13,7 @@ export interface AudioData {
 
 export interface Config {
   // TTS provider selection
-  ttsProvider: 'voicevox' | 'espeak';
+  ttsProvider: 'voicevox' | 'espeak' | 'melo';
 
   // VOICEVOX settings
   voicevoxUrl: string;
@@ -23,6 +23,12 @@ export interface Config {
   espeakVoice: string;      // Language code (e.g., 'en', 'ja')
   espeakVariant: string;    // Voice variant: 'm1'-'m7', 'f1'-'f4', or ''
   espeakCommand: string;    // Command name: 'espeak' or 'espeak-ng'
+
+  // MeloTTS settings
+  meloLanguage: string;     // Language: EN, JP, ES, FR, CN, KR
+  meloSpeaker: string;      // Speaker: EN-US, EN-BR, EN-AU, EN-INDIA, JP, etc.
+  meloDevice: string;       // Device: auto, cpu, cuda
+  meloPython: string;       // Python command: python, python3
 
   // Common settings
   speed: number;            // 0.5-2.0

@@ -8,7 +8,7 @@ export async function main(denops: Denops): Promise<void> {
   async function getConfig(): Promise<Config> {
     return {
       // TTS provider selection
-      ttsProvider: await vars.g.get(denops, "read_text_tts_provider", "voicevox") as 'voicevox' | 'espeak',
+      ttsProvider: await vars.g.get(denops, "read_text_tts_provider", "voicevox") as 'voicevox' | 'espeak' | 'melo',
 
       // VOICEVOX settings
       voicevoxUrl: await vars.g.get(denops, "read_text_voicevox_url", "http://localhost:50021") as string,
@@ -18,6 +18,12 @@ export async function main(denops: Denops): Promise<void> {
       espeakVoice: await vars.g.get(denops, "read_text_espeak_voice", "en") as string,
       espeakVariant: await vars.g.get(denops, "read_text_espeak_variant", "") as string,
       espeakCommand: await vars.g.get(denops, "read_text_espeak_command", "espeak") as string,
+
+      // MeloTTS settings
+      meloLanguage: await vars.g.get(denops, "read_text_melo_language", "EN") as string,
+      meloSpeaker: await vars.g.get(denops, "read_text_melo_speaker", "EN-US") as string,
+      meloDevice: await vars.g.get(denops, "read_text_melo_device", "auto") as string,
+      meloPython: await vars.g.get(denops, "read_text_melo_python", "python3") as string,
 
       // Common settings
       speed: await vars.g.get(denops, "read_text_speed", 1.0) as number,
@@ -29,7 +35,7 @@ export async function main(denops: Denops): Promise<void> {
       autoCleanup: await vars.g.get(denops, "read_text_auto_cleanup", 1) as number === 1,
 
       // Audio playback
-      audioBackend: await vars.g.get(denops, "read_text_audio_backend", "deno_audio") as string,
+      audioBackend: await vars.g.get(denops, "read_text_audio_backend", "aplay") as string,
 
       // Text processing
       splitThreshold: await vars.g.get(denops, "read_text_split_threshold", 50) as number,
