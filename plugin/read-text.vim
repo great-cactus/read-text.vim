@@ -59,6 +59,36 @@ if !exists('g:read_text_melo_python')
   let g:read_text_melo_python = 'python3'
 endif
 
+" kokoro-tts settings
+if !exists('g:read_text_kokoro_command')
+  let g:read_text_kokoro_command = 'kokoro-tts'
+endif
+
+if !exists('g:read_text_kokoro_model_path')
+  " Path to kokoro-v1.0.onnx model file
+  let g:read_text_kokoro_model_path = '~/.local/share/kokoro-tts/kokoro-v1.0.onnx'
+endif
+
+if !exists('g:read_text_kokoro_voices_path')
+  " Path to voices-v1.0.bin file
+  let g:read_text_kokoro_voices_path = '~/.local/share/kokoro-tts/voices-v1.0.bin'
+endif
+
+if !exists('g:read_text_kokoro_lang')
+  " Language: en-us, en-gb, ja, cmn, fr-fr, it
+  let g:read_text_kokoro_lang = 'en-us'
+endif
+
+if !exists('g:read_text_kokoro_voice')
+  " Voice: af_sarah, bf_alice, jf_alpha, am_adam, etc.
+  let g:read_text_kokoro_voice = 'af_sarah'
+endif
+
+if !exists('g:read_text_kokoro_format')
+  " Audio format: wav or mp3
+  let g:read_text_kokoro_format = 'wav'
+endif
+
 " Common settings (normalized values)
 if !exists('g:read_text_speed')
   let g:read_text_speed = 1.0

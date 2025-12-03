@@ -8,7 +8,7 @@ export async function main(denops: Denops): Promise<void> {
   async function getConfig(): Promise<Config> {
     return {
       // TTS provider selection
-      ttsProvider: await vars.g.get(denops, "read_text_tts_provider", "voicevox") as 'voicevox' | 'espeak' | 'melo',
+      ttsProvider: await vars.g.get(denops, "read_text_tts_provider", "voicevox") as 'voicevox' | 'espeak' | 'melo' | 'kokoro',
 
       // VOICEVOX settings
       voicevoxUrl: await vars.g.get(denops, "read_text_voicevox_url", "http://localhost:50021") as string,
@@ -24,6 +24,14 @@ export async function main(denops: Denops): Promise<void> {
       meloSpeaker: await vars.g.get(denops, "read_text_melo_speaker", "EN-US") as string,
       meloDevice: await vars.g.get(denops, "read_text_melo_device", "auto") as string,
       meloPython: await vars.g.get(denops, "read_text_melo_python", "python3") as string,
+
+      // kokoro-tts settings
+      kokoroCommand: await vars.g.get(denops, "read_text_kokoro_command", "kokoro-tts") as string,
+      kokoroModelPath: await vars.g.get(denops, "read_text_kokoro_model_path", "~/.local/share/kokoro-tts/kokoro-v1.0.onnx") as string,
+      kokoroVoicesPath: await vars.g.get(denops, "read_text_kokoro_voices_path", "~/.local/share/kokoro-tts/voices-v1.0.bin") as string,
+      kokoroLang: await vars.g.get(denops, "read_text_kokoro_lang", "en-us") as string,
+      kokoroVoice: await vars.g.get(denops, "read_text_kokoro_voice", "af_sarah") as string,
+      kokoroFormat: await vars.g.get(denops, "read_text_kokoro_format", "wav") as string,
 
       // Common settings
       speed: await vars.g.get(denops, "read_text_speed", 1.0) as number,

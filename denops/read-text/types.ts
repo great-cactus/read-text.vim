@@ -13,7 +13,7 @@ export interface AudioData {
 
 export interface Config {
   // TTS provider selection
-  ttsProvider: 'voicevox' | 'espeak' | 'melo';
+  ttsProvider: 'voicevox' | 'espeak' | 'melo' | 'kokoro';
 
   // VOICEVOX settings
   voicevoxUrl: string;
@@ -29,6 +29,14 @@ export interface Config {
   meloSpeaker: string;      // Speaker: EN-US, EN-BR, EN-AU, EN-INDIA, JP, etc.
   meloDevice: string;       // Device: auto, cpu, cuda
   meloPython: string;       // Python command: python, python3
+
+  // kokoro-tts settings
+  kokoroCommand: string;    // Command name: kokoro-tts
+  kokoroModelPath: string;  // Path to kokoro-v1.0.onnx model file
+  kokoroVoicesPath: string; // Path to voices-v1.0.bin file
+  kokoroLang: string;       // Language: en-us, en-gb, ja, cmn, fr-fr, it
+  kokoroVoice: string;      // Voice: af_sarah, bf_alice, jf_alpha, etc.
+  kokoroFormat: string;     // Audio format: wav or mp3
 
   // Common settings
   speed: number;            // 0.5-2.0

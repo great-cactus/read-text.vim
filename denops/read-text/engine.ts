@@ -5,6 +5,7 @@ import type { TTSProvider } from "./tts/provider.ts";
 import { VoicevoxProvider } from "./tts/voicevox_provider.ts";
 import { EspeakProvider } from "./tts/espeak_provider.ts";
 import { MeloProvider } from "./tts/melo_provider.ts";
+import { KokoroProvider } from "./tts/kokoro_provider.ts";
 import { AudioPlayer } from "./audio/player.ts";
 
 export class ReadTextEngine {
@@ -26,6 +27,8 @@ export class ReadTextEngine {
         return new EspeakProvider(config);
       case 'melo':
         return new MeloProvider(config);
+      case 'kokoro':
+        return new KokoroProvider(config);
       default:
         throw new Error(`Unknown TTS provider: ${config.ttsProvider}`);
     }
