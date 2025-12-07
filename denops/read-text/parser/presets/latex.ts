@@ -18,6 +18,8 @@ export const latexPreset: LanguagePreset = {
     { type: 'range', start: '\\begin{lstlisting}', end: '\\end{lstlisting}' },
     { type: 'range', start: '\\begin{verbatim}', end: '\\end{verbatim}' },
     { type: 'range', start: '\\begin{minted}', end: '\\end{minted}' },
+    { type: 'range', start: '\\begin{figure}', end: '\\end{figure}' },
+    { type: 'range', start: '\\begin{table}', end: '\\end{table}' },
 
     // -------------------------------------------------------
     // 2. Command Rules - Keep Content
