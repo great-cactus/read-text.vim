@@ -126,6 +126,7 @@ let g:read_text_speed = 1.0           " 0.5-2.0
 let g:read_text_pitch = 0.0           " -1.0 to 1.0
 let g:read_text_temp_dir = './.tmp'
 let g:read_text_auto_cleanup = 1
-let g:read_text_audio_backend = 'aplay'
+let g:read_text_audio_command = 'aplay'
+let g:read_text_audio_args = ['-q']
 let g:read_text_split_threshold = 50  " Lines per chunk
 ```

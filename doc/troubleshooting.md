@@ -33,7 +33,8 @@ wsl --shutdown
 ### Fallback to aplay
 
 ```vim
-let g:read_text_audio_backend = 'aplay'
+let g:read_text_audio_command = 'aplay'
+let g:read_text_audio_args = ['-q']
 ```
 
 ---

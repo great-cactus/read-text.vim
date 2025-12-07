@@ -6,6 +6,26 @@ Vim/Neovim plugin for text-to-speech using denops.vim.
 
 This plugin reads aloud text in Vim/Neovim using various TTS engines.
 
+```mermaid
+flowchart LR
+    subgraph Vim/Neovim
+        A[Text]
+    end
+    subgraph TTS Engine
+        B[kokoro-tts]
+        C[VOICEVOX]
+        D[espeak]
+        E[MeloTTS]
+    end
+    subgraph Audio Player
+        F[mpv / aplay / ...]
+    end
+
+    A --> B & C & D & E
+    B & C & D & E -->|WAV/MP3| F
+    F -->|Sound| G((🔊))
+```
+
 ### Requirements
 
 - Vim 8.2+ or Neovim 0.5+
@@ -24,9 +44,31 @@ This plugin reads aloud text in Vim/Neovim using various TTS engines.
 
 See [doc/providers.md](doc/providers.md) for detailed setup instructions.
 
+## Audio Players
+
+| Player | Platform | Description |
+|--------|----------|-------------|
+| aplay | Linux (ALSA) | Default, lightweight |
+| paplay | Linux (PulseAudio) | PulseAudio systems |
+| mpv | Cross-platform | Feature-rich, versatile |
+| ffplay | Cross-platform | FFmpeg-based |
+| afplay | macOS | Built-in macOS player |
+
+```vim
+" Example: Use mpv
+let g:read_text_audio_command = 'mpv'
+let g:read_text_audio_args = ['--no-video', '--really-quiet']
+```
+
+See [doc/audio-players.md](doc/audio-players.md) for detailed setup instructions.
+
 ## Quick Start (kokoro-tts)
 
 ```vim
+" Setup audio player
+let g:read_text_audio_command = 'mpv'
+let g:read_text_audio_args = ['--no-video', '--really-quiet']
+
 " Select TTS provider
 let g:read_text_tts_provider = 'kokoro'
 
@@ -62,6 +104,7 @@ nmap <leader>rs <Plug>(read-text-stop)
 ## Documentation
 
 - [doc/providers.md](doc/providers.md) - TTS provider setup and configuration
+- [doc/audio-players.md](doc/audio-players.md) - Audio player setup and configuration
 - [doc/troubleshooting.md](doc/troubleshooting.md) - Troubleshooting guide
 
 ## License
