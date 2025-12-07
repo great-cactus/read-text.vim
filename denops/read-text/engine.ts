@@ -68,4 +68,8 @@ export class ReadTextEngine {
   async checkConnection(): Promise<boolean> {
     return await this.provider.checkConnection();
   }
+
+  stop(): void {
+    this.player.stop();
+  }
 }

@@ -4,6 +4,8 @@ import type { Config } from "./types.ts";
 import { ReadTextEngine } from "./engine.ts";
 import { TextExtractor } from "./text_extractor.ts";
 
+let currentEngine: ReadTextEngine | null = null;
+
 export async function main(denops: Denops): Promise<void> {
   async function getConfig(): Promise<Config> {
     return {
@@ -56,14 +58,14 @@ export async function main(denops: Denops): Promise<void> {
     async readFromCursor(speakerId?: number): Promise<void> {
       try {
         const config = await getConfig();
-        const engine = new ReadTextEngine(config);
+        currentEngine = new ReadTextEngine(config);
 
         const text = await textExtractor.extractFromCursor();
 
         // If speakerId is provided, use it as voice option
         const options = speakerId !== undefined ? { voice: speakerId.toString() } : undefined;
 
-        await engine.readText(text, options);
+        await currentEngine.readText(text, options);
       } catch (error) {
         console.error("ReadFromCursor failed:", error);
         await denops.cmd("echohl ErrorMsg | echo 'ReadFromCursor failed: " + error.message + "' | echohl None");
@@ -73,14 +75,14 @@ export async function main(denops: Denops): Promise<void> {
     async readSelection(speakerId?: number): Promise<void> {
       try {
         const config = await getConfig();
-        const engine = new ReadTextEngine(config);
+        currentEngine = new ReadTextEngine(config);
 
         const text = await textExtractor.extractSelection();
 
         // If speakerId is provided, use it as voice option
         const options = speakerId !== undefined ? { voice: speakerId.toString() } : undefined;
 
-        await engine.readText(text, options);
+        await currentEngine.readText(text, options);
       } catch (error) {
         console.error("ReadSelection failed:", error);
         await denops.cmd("echohl ErrorMsg | echo 'ReadSelection failed: " + error.message + "' | echohl None");
@@ -90,17 +92,23 @@ export async function main(denops: Denops): Promise<void> {
     async readLine(speakerId?: number): Promise<void> {
       try {
         const config = await getConfig();
-        const engine = new ReadTextEngine(config);
+        currentEngine = new ReadTextEngine(config);
 
         const text = await textExtractor.extractCurrentLine();
 
         // If speakerId is provided, use it as voice option
         const options = speakerId !== undefined ? { voice: speakerId.toString() } : undefined;
 
-        await engine.readText(text, options);
+        await currentEngine.readText(text, options);
       } catch (error) {
         console.error("ReadLine failed:", error);
         await denops.cmd("echohl ErrorMsg | echo 'ReadLine failed: " + error.message + "' | echohl None");
+      }
+    },
+
+    stopReading(): void {
+      if (currentEngine) {
+        currentEngine.stop();
       }
     },
 

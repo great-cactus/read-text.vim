@@ -5,9 +5,21 @@ import type { Config } from "../types.ts";
 
 export class AudioPlayer {
   private config: Config;
+  private currentProcess: Deno.ChildProcess | null = null;
 
   constructor(config: Config) {
     this.config = config;
+  }
+
+  stop(): void {
+    if (this.currentProcess) {
+      try {
+        this.currentProcess.kill("SIGTERM");
+      } catch {
+        // Process may have already terminated
+      }
+      this.currentProcess = null;
+    }
   }
 
   async playAudio(audioBuffer: ArrayBuffer): Promise<void> {
@@ -96,8 +108,11 @@ export class AudioPlayer {
       stderr: "null",
     });
 
-    const { success } = await command.output();
-    if (!success) {
+    this.currentProcess = command.spawn();
+    const status = await this.currentProcess.status;
+    this.currentProcess = null;
+
+    if (!status.success && status.signal !== "SIGTERM") {
       throw new Error("aplay command failed");
     }
   }

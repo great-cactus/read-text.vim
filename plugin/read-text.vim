@@ -135,6 +135,7 @@ endif
 command! -nargs=? ReadFromCursor call denops#request('read-text', 'readFromCursor', [<q-args>])
 command! -nargs=? -range ReadSelection call denops#request('read-text', 'readSelection', [<q-args>])
 command! -nargs=? ReadLine call denops#request('read-text', 'readLine', [<q-args>])
+command! ReadTextStop call denops#request('read-text', 'stopReading', [])
 command! ReadTextCheckConnection call <SID>check_connection()
 
 " 非同期版コマンド
@@ -170,6 +171,7 @@ endfunction
 nnoremap <silent> <Plug>(read-text-from-cursor) :ReadFromCursor<CR>
 vnoremap <silent> <Plug>(read-text-selection) :ReadSelection<CR>
 nnoremap <silent> <Plug>(read-text-line) :ReadLine<CR>
+nnoremap <silent> <Plug>(read-text-stop) :ReadTextStop<CR>
 nnoremap <silent> <Plug>(read-text-check-connection) :ReadTextCheckConnection<CR>
 
 " 非同期版<Plug>マッピング
@@ -179,8 +181,8 @@ nnoremap <silent> <Plug>(read-text-line-async) :ReadLineAsync<CR>
 
 " 推奨キーマッピング（ユーザーが有効にする場合）
 if get(g:, 'read_text_enable_default_mappings', 0)
-  nmap <leader>rs <Plug>(read-text-from-cursor)
-  vmap <leader>rs <Plug>(read-text-selection)
+  nmap <leader>rc <Plug>(read-text-from-cursor)
+  vmap <leader>rc <Plug>(read-text-selection)
   nmap <leader>rl <Plug>(read-text-line)
-  nmap <leader>rc <Plug>(read-text-check-connection)
+  nmap <leader>rs <Plug>(read-text-stop)
 endif
