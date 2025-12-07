@@ -1,6 +1,6 @@
 import type { Denops } from "https://deno.land/x/denops_std@v6.4.0/mod.ts";
 import * as vars from "https://deno.land/x/denops_std@v6.4.0/variable/mod.ts";
-import type { Config } from "./types.ts";
+import type { Config, ReadingRulesConfig } from "./types.ts";
 import { ReadTextEngine } from "./engine.ts";
 import { TextExtractor } from "./text_extractor.ts";
 
@@ -49,6 +49,20 @@ export async function main(denops: Denops): Promise<void> {
 
       // Text processing
       splitThreshold: await vars.g.get(denops, "read_text_split_threshold", 50) as number,
+
+      // Reading rules
+      readingRulesEnabled: await vars.g.get(denops, "read_text_reading_rules_enabled", 1) as number === 1,
+      readingRulesPresets: await vars.g.get(denops, "read_text_reading_rules_presets", ["latex"]) as string[],
+      readingRulesMode: await vars.g.get(denops, "read_text_reading_rules_mode", "extend") as 'override' | 'extend',
+    };
+  }
+
+  async function getReadingRulesConfig(): Promise<ReadingRulesConfig> {
+    return {
+      enabled: await vars.g.get(denops, "read_text_reading_rules_enabled", 1) as number === 1,
+      presets: await vars.g.get(denops, "read_text_reading_rules_presets", ["latex"]) as string[],
+      mode: await vars.g.get(denops, "read_text_reading_rules_mode", "extend") as 'override' | 'extend',
+      customRules: [], // Custom rules can be added via API later
     };
   }
 
@@ -59,6 +73,10 @@ export async function main(denops: Denops): Promise<void> {
       try {
         const config = await getConfig();
         currentEngine = new ReadTextEngine(config);
+
+        // Configure reading rules parser
+        const readingRulesConfig = await getReadingRulesConfig();
+        textExtractor.setParserConfig(readingRulesConfig);
 
         const text = await textExtractor.extractFromCursor();
 
@@ -77,6 +95,10 @@ export async function main(denops: Denops): Promise<void> {
         const config = await getConfig();
         currentEngine = new ReadTextEngine(config);
 
+        // Configure reading rules parser
+        const readingRulesConfig = await getReadingRulesConfig();
+        textExtractor.setParserConfig(readingRulesConfig);
+
         const text = await textExtractor.extractSelection();
 
         // If speakerId is provided, use it as voice option
@@ -93,6 +115,10 @@ export async function main(denops: Denops): Promise<void> {
       try {
         const config = await getConfig();
         currentEngine = new ReadTextEngine(config);
+
+        // Configure reading rules parser
+        const readingRulesConfig = await getReadingRulesConfig();
+        textExtractor.setParserConfig(readingRulesConfig);
 
         const text = await textExtractor.extractCurrentLine();
 

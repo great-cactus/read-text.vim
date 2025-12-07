@@ -1,5 +1,16 @@
 // Common type definitions for read-text.vim
 
+// Re-export parser types for convenience
+export type {
+  ReadingRule,
+  CommandRule,
+  RangeExcludeRule,
+  SimpleExcludeRule,
+  ReplaceRule,
+  LanguagePreset,
+  ReadingRulesConfig,
+} from './parser/types.ts';
+
 export interface TTSOptions {
   speed?: number;      // 0.5-2.0 (normalized)
   pitch?: number;      // -1.0-1.0 (normalized)
@@ -52,4 +63,9 @@ export interface Config {
 
   // Text processing
   splitThreshold: number;
+
+  // Reading rules
+  readingRulesEnabled: boolean;
+  readingRulesPresets: string[];
+  readingRulesMode: 'override' | 'extend';
 }
