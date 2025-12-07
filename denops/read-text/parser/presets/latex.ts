@@ -215,5 +215,110 @@ export const latexPreset: LanguagePreset = {
 
     // Tilde and special spacing
     { type: 'replace', pattern: '~', isRegex: false, replacement: ' ' },
+
+    // -------------------------------------------------------
+    // 6. Abbreviations (dot removal)
+    // -------------------------------------------------------
+    { type: 'replace', pattern: 'e.g.', isRegex: false, replacement: 'eg' },
+    { type: 'replace', pattern: 'i.e.', isRegex: false, replacement: 'ie' },
+    { type: 'replace', pattern: 'etc.', isRegex: false, replacement: 'etc' },
+    { type: 'replace', pattern: 'et al.', isRegex: false, replacement: 'et al' },
+    { type: 'replace', pattern: 'cf.', isRegex: false, replacement: 'cf' },
+    { type: 'replace', pattern: 'viz.', isRegex: false, replacement: 'viz' },
+    { type: 'replace', pattern: 'vs.', isRegex: false, replacement: 'vs' },
+    { type: 'replace', pattern: 'Fig.', isRegex: false, replacement: 'Fig' },
+    { type: 'replace', pattern: 'Eq.', isRegex: false, replacement: 'Eq' },
+    { type: 'replace', pattern: 'Ref.', isRegex: false, replacement: 'Ref' },
+    { type: 'replace', pattern: 'Tab.', isRegex: false, replacement: 'Tab' },
+
+    // -------------------------------------------------------
+    // 7. Units (plain text to readable form, singular)
+    // -------------------------------------------------------
+    // Length units
+    { type: 'replace', pattern: '\\bnm\\b', isRegex: true, flags: 'g', replacement: 'nanometer' },
+    { type: 'replace', pattern: '\\bμm\\b', isRegex: true, flags: 'g', replacement: 'micrometer' },
+    { type: 'replace', pattern: '\\bum\\b', isRegex: true, flags: 'g', replacement: 'micrometer' },
+    { type: 'replace', pattern: '\\bmm\\b', isRegex: true, flags: 'g', replacement: 'millimeter' },
+    { type: 'replace', pattern: '\\bcm\\b', isRegex: true, flags: 'g', replacement: 'centimeter' },
+    { type: 'replace', pattern: '\\bkm\\b', isRegex: true, flags: 'g', replacement: 'kilometer' },
+
+    // Mass units
+    { type: 'replace', pattern: '\\bmg\\b', isRegex: true, flags: 'g', replacement: 'milligram' },
+    { type: 'replace', pattern: '\\bkg\\b', isRegex: true, flags: 'g', replacement: 'kilogram' },
+
+    // Time units
+    { type: 'replace', pattern: '\\bns\\b', isRegex: true, flags: 'g', replacement: 'nanosecond' },
+    { type: 'replace', pattern: '\\bms\\b', isRegex: true, flags: 'g', replacement: 'millisecond' },
+
+    // Frequency units
+    { type: 'replace', pattern: '\\bkHz\\b', isRegex: true, flags: 'g', replacement: 'kilohertz' },
+    { type: 'replace', pattern: '\\bMHz\\b', isRegex: true, flags: 'g', replacement: 'megahertz' },
+    { type: 'replace', pattern: '\\bGHz\\b', isRegex: true, flags: 'g', replacement: 'gigahertz' },
+
+    // Energy units
+    { type: 'replace', pattern: '\\beV\\b', isRegex: true, flags: 'g', replacement: 'electron volt' },
+    { type: 'replace', pattern: '\\bkeV\\b', isRegex: true, flags: 'g', replacement: 'kilo electron volt' },
+    { type: 'replace', pattern: '\\bMeV\\b', isRegex: true, flags: 'g', replacement: 'mega electron volt' },
+
+    // Pressure units
+    { type: 'replace', pattern: '\\bPa\\b', isRegex: true, flags: 'g', replacement: 'pascal' },
+    { type: 'replace', pattern: '\\bkPa\\b', isRegex: true, flags: 'g', replacement: 'kilopascal' },
+    { type: 'replace', pattern: '\\bMPa\\b', isRegex: true, flags: 'g', replacement: 'megapascal' },
+
+    // -------------------------------------------------------
+    // 8. Mathematical functions
+    // -------------------------------------------------------
+    { type: 'replace', pattern: '\\sin', isRegex: false, replacement: 'sine' },
+    { type: 'replace', pattern: '\\cos', isRegex: false, replacement: 'cosine' },
+    { type: 'replace', pattern: '\\tan', isRegex: false, replacement: 'tangent' },
+    { type: 'replace', pattern: '\\cot', isRegex: false, replacement: 'cotangent' },
+    { type: 'replace', pattern: '\\sec', isRegex: false, replacement: 'secant' },
+    { type: 'replace', pattern: '\\csc', isRegex: false, replacement: 'cosecant' },
+    { type: 'replace', pattern: '\\arcsin', isRegex: false, replacement: 'arc sine' },
+    { type: 'replace', pattern: '\\arccos', isRegex: false, replacement: 'arc cosine' },
+    { type: 'replace', pattern: '\\arctan', isRegex: false, replacement: 'arc tangent' },
+    { type: 'replace', pattern: '\\sinh', isRegex: false, replacement: 'hyperbolic sine' },
+    { type: 'replace', pattern: '\\cosh', isRegex: false, replacement: 'hyperbolic cosine' },
+    { type: 'replace', pattern: '\\tanh', isRegex: false, replacement: 'hyperbolic tangent' },
+    { type: 'replace', pattern: '\\log', isRegex: false, replacement: 'log' },
+    { type: 'replace', pattern: '\\ln', isRegex: false, replacement: 'natural log' },
+    { type: 'replace', pattern: '\\exp', isRegex: false, replacement: 'exp' },
+    { type: 'replace', pattern: '\\lim', isRegex: false, replacement: 'limit' },
+    { type: 'replace', pattern: '\\max', isRegex: false, replacement: 'max' },
+    { type: 'replace', pattern: '\\min', isRegex: false, replacement: 'min' },
+    { type: 'replace', pattern: '\\sup', isRegex: false, replacement: 'supremum' },
+    { type: 'replace', pattern: '\\inf', isRegex: false, replacement: 'infimum' },
+    { type: 'replace', pattern: '\\det', isRegex: false, replacement: 'determinant' },
+    { type: 'replace', pattern: '\\dim', isRegex: false, replacement: 'dimension' },
+    { type: 'replace', pattern: '\\ker', isRegex: false, replacement: 'kernel' },
+    { type: 'replace', pattern: '\\arg', isRegex: false, replacement: 'argument' },
+    { type: 'replace', pattern: '\\deg', isRegex: false, replacement: 'degree' },
+    { type: 'replace', pattern: '\\gcd', isRegex: false, replacement: 'greatest common divisor' },
+    { type: 'replace', pattern: '\\lcm', isRegex: false, replacement: 'least common multiple' },
+
+    // -------------------------------------------------------
+    // 9. Additional mathematical symbols
+    // -------------------------------------------------------
+    { type: 'replace', pattern: '\\le', isRegex: false, replacement: 'less than or equal to' },
+    { type: 'replace', pattern: '\\ge', isRegex: false, replacement: 'greater than or equal to' },
+    { type: 'replace', pattern: '\\ne', isRegex: false, replacement: 'not equal to' },
+    { type: 'replace', pattern: '\\ll', isRegex: false, replacement: 'much less than' },
+    { type: 'replace', pattern: '\\gg', isRegex: false, replacement: 'much greater than' },
+    { type: 'replace', pattern: '\\sim', isRegex: false, replacement: 'similar to' },
+    { type: 'replace', pattern: '\\simeq', isRegex: false, replacement: 'similar or equal to' },
+    { type: 'replace', pattern: '\\cong', isRegex: false, replacement: 'congruent to' },
+    { type: 'replace', pattern: '\\to', isRegex: false, replacement: 'to' },
+    { type: 'replace', pattern: '\\mapsto', isRegex: false, replacement: 'maps to' },
+    { type: 'replace', pattern: '\\implies', isRegex: false, replacement: 'implies' },
+    { type: 'replace', pattern: '\\iff', isRegex: false, replacement: 'if and only if' },
+    { type: 'replace', pattern: '\\land', isRegex: false, replacement: 'and' },
+    { type: 'replace', pattern: '\\lor', isRegex: false, replacement: 'or' },
+    { type: 'replace', pattern: '\\neg', isRegex: false, replacement: 'not' },
+    { type: 'replace', pattern: '\\wedge', isRegex: false, replacement: 'wedge' },
+    { type: 'replace', pattern: '\\vee', isRegex: false, replacement: 'vee' },
+    { type: 'replace', pattern: '\\otimes', isRegex: false, replacement: 'tensor product' },
+    { type: 'replace', pattern: '\\oplus', isRegex: false, replacement: 'direct sum' },
+    { type: 'replace', pattern: '\\circ', isRegex: false, replacement: 'composition' },
+    { type: 'replace', pattern: '\\dagger', isRegex: false, replacement: 'dagger' },
   ]
 };
