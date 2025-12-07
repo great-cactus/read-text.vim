@@ -46,6 +46,8 @@ export async function main(denops: Denops): Promise<void> {
 
       // Audio playback
       audioBackend: await vars.g.get(denops, "read_text_audio_backend", "aplay") as string,
+      audioCommand: await vars.g.get(denops, "read_text_audio_command", "aplay") as string,
+      audioArgs: await vars.g.get(denops, "read_text_audio_args", ["-q"]) as string[],
 
       // Text processing
       splitThreshold: await vars.g.get(denops, "read_text_split_threshold", 50) as number,

@@ -102,8 +102,9 @@ export class AudioPlayer {
   }
 
   private async playWithAplay(filePath: string): Promise<void> {
-    const command = new Deno.Command("aplay", {
-      args: ["-q", filePath],
+    const args = [...this.config.audioArgs, filePath];
+    const command = new Deno.Command(this.config.audioCommand, {
+      args: args,
       stdout: "null",
       stderr: "null",
     });
@@ -113,7 +114,7 @@ export class AudioPlayer {
     this.currentProcess = null;
 
     if (!status.success && status.signal !== "SIGTERM") {
-      throw new Error("aplay command failed");
+      throw new Error(`${this.config.audioCommand} command failed`);
     }
   }
 

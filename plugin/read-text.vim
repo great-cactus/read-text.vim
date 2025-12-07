@@ -126,6 +126,22 @@ if !exists('g:read_text_audio_backend')
   let g:read_text_audio_backend = 'aplay'
 endif
 
+" Audio command settings
+" Command name (e.g., 'aplay', 'mpv', 'play', 'paplay')
+if !exists('g:read_text_audio_command')
+  let g:read_text_audio_command = 'aplay'
+endif
+
+" Command arguments (file path is automatically appended at the end)
+" Examples:
+"   aplay:  ['-q']
+"   mpv:    ['--no-video', '--really-quiet']
+"   play:   ['-q']
+"   paplay: []
+if !exists('g:read_text_audio_args')
+  let g:read_text_audio_args = ['-q']
+endif
+
 " Text processing
 if !exists('g:read_text_split_threshold')
   let g:read_text_split_threshold = 50

@@ -60,15 +60,16 @@ export const latexPreset: LanguagePreset = {
     // Metadata and reference IDs not displayed after compilation
     // -------------------------------------------------------
     // argMask: [false] safely removes {...} by parsing brace pairs
-    { type: 'command', name: 'label', argCount: 1, argMask: [false] },
-    { type: 'command', name: 'ref', argCount: 1, argMask: [false] },
-    { type: 'command', name: 'eqref', argCount: 1, argMask: [false] },
-    { type: 'command', name: 'pageref', argCount: 1, argMask: [false] },
-    { type: 'command', name: 'cite', argCount: 1, argMask: [false], hasOptionalArg: true },
-    { type: 'command', name: 'citet', argCount: 1, argMask: [false], hasOptionalArg: true },
-    { type: 'command', name: 'citep', argCount: 1, argMask: [false], hasOptionalArg: true },
+    { type: 'command', name: 'label'     , argCount: 1, argMask: [false] },
+    { type: 'command', name: 'ref'       , argCount: 1, argMask: [false] },
+    { type: 'command', name: 'eqref'     , argCount: 1, argMask: [false] },
+    { type: 'command', name: 'pageref'   , argCount: 1, argMask: [false] },
+    { type: 'command', name: 'ce'        , argCount: 1, argMask: [false], hasOptionalArg: true },
+    { type: 'command', name: 'cite'      , argCount: 1, argMask: [false], hasOptionalArg: true },
+    { type: 'command', name: 'citet'     , argCount: 1, argMask: [false], hasOptionalArg: true },
+    { type: 'command', name: 'citep'     , argCount: 1, argMask: [false], hasOptionalArg: true },
     { type: 'command', name: 'citeauthor', argCount: 1, argMask: [false], hasOptionalArg: true },
-    { type: 'command', name: 'citeyear', argCount: 1, argMask: [false], hasOptionalArg: true },
+    { type: 'command', name: 'citeyear'  , argCount: 1, argMask: [false], hasOptionalArg: true },
 
     // External file loading, URLs
     { type: 'command', name: 'url', argCount: 1, argMask: [false] },

@@ -60,6 +60,8 @@ export interface Config {
 
   // Audio playback
   audioBackend: string;
+  audioCommand: string;
+  audioArgs: string[];
 
   // Text processing
   splitThreshold: number;
