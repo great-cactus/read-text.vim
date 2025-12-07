@@ -6,12 +6,14 @@ import type { Config } from "../types.ts";
 export class AudioPlayer {
   private config: Config;
   private currentProcess: Deno.ChildProcess | null = null;
+  private aborted = false;
 
   constructor(config: Config) {
     this.config = config;
   }
 
   stop(): void {
+    this.aborted = true;
     if (this.currentProcess) {
       try {
         this.currentProcess.kill("SIGTERM");
@@ -20,6 +22,14 @@ export class AudioPlayer {
       }
       this.currentProcess = null;
     }
+  }
+
+  reset(): void {
+    this.aborted = false;
+  }
+
+  wasAborted(): boolean {
+    return this.aborted;
   }
 
   async playAudio(audioBuffer: ArrayBuffer): Promise<void> {

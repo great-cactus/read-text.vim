@@ -147,6 +147,12 @@ if !exists('g:read_text_split_threshold')
   let g:read_text_split_threshold = 50
 endif
 
+" Pipeline settings
+if !exists('g:read_text_pipeline_buffer_size')
+  " Number of audio chunks to buffer ahead (default: 2)
+  let g:read_text_pipeline_buffer_size = 2
+endif
+
 " コマンド定義
 command! -nargs=? ReadFromCursor call denops#request('read-text', 'readFromCursor', [<q-args>])
 command! -nargs=? -range ReadSelection call denops#request('read-text', 'readSelection', [<q-args>])

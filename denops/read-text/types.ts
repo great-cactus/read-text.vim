@@ -66,6 +66,9 @@ export interface Config {
   // Text processing
   splitThreshold: number;
 
+  // Pipeline settings
+  pipelineBufferSize: number;
+
   // Reading rules
   readingRulesEnabled: boolean;
   readingRulesPresets: string[];

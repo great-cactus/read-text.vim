@@ -7,11 +7,13 @@ import { EspeakProvider } from "./tts/espeak_provider.ts";
 import { MeloProvider } from "./tts/melo_provider.ts";
 import { KokoroProvider } from "./tts/kokoro_provider.ts";
 import { AudioPlayer } from "./audio/player.ts";
+import { PipelineController } from "./async/pipeline.ts";
 
 export class ReadTextEngine {
   private config: Config;
   private provider: TTSProvider;
   private player: AudioPlayer;
+  private pipeline: PipelineController | null = null;
 
   constructor(config: Config) {
     this.config = config;
@@ -41,18 +43,44 @@ export class ReadTextEngine {
 
     const lines = text.split('\n');
     if (lines.length > this.config.splitThreshold) {
-      await this.readTextInChunks(lines, options);
+      await this.readTextWithPipeline(lines, options);
     } else {
       await this.readSingleText(text, options);
     }
   }
 
-  private async readTextInChunks(lines: string[], options?: TTSOptions): Promise<void> {
+  private async readTextWithPipeline(
+    lines: string[],
+    options?: TTSOptions
+  ): Promise<void> {
+    // Build chunk list
+    const chunks: string[] = [];
     for (let i = 0; i < lines.length; i += this.config.splitThreshold) {
       const chunk = lines.slice(i, i + this.config.splitThreshold).join('\n');
       if (chunk.trim()) {
-        await this.readSingleText(chunk, options);
+        chunks.push(chunk);
       }
+    }
+
+    if (chunks.length === 0) {
+      return;
+    }
+
+    // Single chunk: use direct playback (no pipeline overhead)
+    if (chunks.length === 1) {
+      await this.readSingleText(chunks[0], options);
+      return;
+    }
+
+    // Multiple chunks: use pipeline
+    this.pipeline = new PipelineController(this.provider, this.player, {
+      maxBufferSize: this.config.pipelineBufferSize,
+    });
+
+    try {
+      await this.pipeline.runPipeline(chunks, options);
+    } finally {
+      this.pipeline = null;
     }
   }
 
@@ -61,7 +89,8 @@ export class ReadTextEngine {
       const audioData = await this.provider.synthesize(text, options);
       await this.player.playAudio(audioData.buffer);
     } catch (error) {
-      throw new Error(`Text-to-speech failed: ${error.message}`);
+      const message = error instanceof Error ? error.message : String(error);
+      throw new Error(`Text-to-speech failed: ${message}`);
     }
   }
 
@@ -70,6 +99,11 @@ export class ReadTextEngine {
   }
 
   stop(): void {
+    // Stop pipeline if running
+    if (this.pipeline) {
+      this.pipeline.stop();
+    }
+    // Also stop player directly (for single-text case)
     this.player.stop();
   }
 }

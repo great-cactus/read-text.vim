@@ -52,6 +52,9 @@ export async function main(denops: Denops): Promise<void> {
       // Text processing
       splitThreshold: await vars.g.get(denops, "read_text_split_threshold", 50) as number,
 
+      // Pipeline settings
+      pipelineBufferSize: await vars.g.get(denops, "read_text_pipeline_buffer_size", 2) as number,
+
       // Reading rules
       readingRulesEnabled: await vars.g.get(denops, "read_text_reading_rules_enabled", 1) as number === 1,
       readingRulesPresets: await vars.g.get(denops, "read_text_reading_rules_presets", ["latex"]) as string[],
