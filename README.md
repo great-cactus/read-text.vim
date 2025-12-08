@@ -81,6 +81,7 @@ nmap <leader>rc <Plug>(read-text-from-cursor)
 vmap <leader>rc <Plug>(read-text-selection)
 nmap <leader>rl <Plug>(read-text-line)
 nmap <leader>rs <Plug>(read-text-stop)
+nmap <leader>rp <Plug>(read-text-toggle-pause)
 ```
 
 ## Commands
@@ -91,6 +92,9 @@ nmap <leader>rs <Plug>(read-text-stop)
 | `:ReadSelection` | Read visual selection |
 | `:ReadLine` | Read current line |
 | `:ReadTextStop` | Stop reading |
+| `:ReadTextPause` | Pause reading |
+| `:ReadTextResume` | Resume reading |
+| `:ReadTextTogglePause` | Toggle pause/resume |
 
 ## Key Mappings
 
@@ -100,6 +104,9 @@ nmap <leader>rs <Plug>(read-text-stop)
 | `<Plug>(read-text-selection)` | Read selection |
 | `<Plug>(read-text-line)` | Read line |
 | `<Plug>(read-text-stop)` | Stop reading |
+| `<Plug>(read-text-pause)` | Pause reading |
+| `<Plug>(read-text-resume)` | Resume reading |
+| `<Plug>(read-text-toggle-pause)` | Toggle pause/resume |
 
 ## Documentation
 
