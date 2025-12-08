@@ -7,6 +7,7 @@ export class AudioPlayer {
   private config: Config;
   private currentProcess: Deno.ChildProcess | null = null;
   private aborted = false;
+  private paused = false;
 
   constructor(config: Config) {
     this.config = config;
@@ -14,7 +15,14 @@ export class AudioPlayer {
 
   stop(): void {
     this.aborted = true;
+    this.paused = false;
     if (this.currentProcess) {
+      try {
+        // If paused, resume first before terminating
+        this.currentProcess.kill("SIGCONT");
+      } catch {
+        // Ignore - process may not be paused
+      }
       try {
         this.currentProcess.kill("SIGTERM");
       } catch {
@@ -24,12 +32,45 @@ export class AudioPlayer {
     }
   }
 
+  pause(): boolean {
+    if (!this.currentProcess || this.paused) {
+      return false;
+    }
+    try {
+      this.currentProcess.kill("SIGSTOP");
+      this.paused = true;
+      return true;
+    } catch {
+      // Process may not support SIGSTOP or already terminated
+      return false;
+    }
+  }
+
+  resume(): boolean {
+    if (!this.currentProcess || !this.paused) {
+      return false;
+    }
+    try {
+      this.currentProcess.kill("SIGCONT");
+      this.paused = false;
+      return true;
+    } catch {
+      // Process may have already terminated
+      return false;
+    }
+  }
+
   reset(): void {
     this.aborted = false;
+    this.paused = false;
   }
 
   wasAborted(): boolean {
     return this.aborted;
+  }
+
+  isPaused(): boolean {
+    return this.paused;
   }
 
   async playAudio(audioBuffer: ArrayBuffer): Promise<void> {

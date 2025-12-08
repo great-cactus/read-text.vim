@@ -168,6 +168,24 @@ export class PipelineController {
     this.player.stop();
   }
 
+  pause(): boolean {
+    if (!this.isRunning) {
+      return false;
+    }
+    return this.player.pause();
+  }
+
+  resume(): boolean {
+    if (!this.isRunning) {
+      return false;
+    }
+    return this.player.resume();
+  }
+
+  isPaused(): boolean {
+    return this.player.isPaused();
+  }
+
   isActive(): boolean {
     return this.isRunning;
   }

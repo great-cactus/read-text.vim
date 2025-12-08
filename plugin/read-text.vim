@@ -158,6 +158,9 @@ command! -nargs=? ReadFromCursor call denops#request('read-text', 'readFromCurso
 command! -nargs=? -range ReadSelection call denops#request('read-text', 'readSelection', [<q-args>])
 command! -nargs=? ReadLine call denops#request('read-text', 'readLine', [<q-args>])
 command! ReadTextStop call denops#request('read-text', 'stopReading', [])
+command! ReadTextPause call denops#request('read-text', 'pauseReading', [])
+command! ReadTextResume call denops#request('read-text', 'resumeReading', [])
+command! ReadTextTogglePause call denops#request('read-text', 'togglePauseReading', [])
 command! ReadTextCheckConnection call <SID>check_connection()
 
 " 非同期版コマンド
@@ -194,6 +197,9 @@ nnoremap <silent> <Plug>(read-text-from-cursor) :ReadFromCursor<CR>
 vnoremap <silent> <Plug>(read-text-selection) :ReadSelection<CR>
 nnoremap <silent> <Plug>(read-text-line) :ReadLine<CR>
 nnoremap <silent> <Plug>(read-text-stop) :ReadTextStop<CR>
+nnoremap <silent> <Plug>(read-text-pause) :ReadTextPause<CR>
+nnoremap <silent> <Plug>(read-text-resume) :ReadTextResume<CR>
+nnoremap <silent> <Plug>(read-text-toggle-pause) :ReadTextTogglePause<CR>
 nnoremap <silent> <Plug>(read-text-check-connection) :ReadTextCheckConnection<CR>
 
 " 非同期版<Plug>マッピング
@@ -207,4 +213,5 @@ if get(g:, 'read_text_enable_default_mappings', 0)
   vmap <leader>rc <Plug>(read-text-selection)
   nmap <leader>rl <Plug>(read-text-line)
   nmap <leader>rs <Plug>(read-text-stop)
+  nmap <leader>rp <Plug>(read-text-toggle-pause)
 endif

@@ -143,6 +143,31 @@ export async function main(denops: Denops): Promise<void> {
       }
     },
 
+    pauseReading(): boolean {
+      if (currentEngine) {
+        return currentEngine.pause();
+      }
+      return false;
+    },
+
+    resumeReading(): boolean {
+      if (currentEngine) {
+        return currentEngine.resume();
+      }
+      return false;
+    },
+
+    togglePauseReading(): boolean {
+      if (currentEngine) {
+        if (currentEngine.isPaused()) {
+          return currentEngine.resume();
+        } else {
+          return currentEngine.pause();
+        }
+      }
+      return false;
+    },
+
     async checkVoicevoxConnection(): Promise<boolean> {
       try {
         const config = await getConfig();

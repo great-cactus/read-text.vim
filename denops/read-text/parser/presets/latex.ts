@@ -64,7 +64,6 @@ export const latexPreset: LanguagePreset = {
     { type: 'command', name: 'ref'       , argCount: 1, argMask: [false] },
     { type: 'command', name: 'eqref'     , argCount: 1, argMask: [false] },
     { type: 'command', name: 'pageref'   , argCount: 1, argMask: [false] },
-    { type: 'command', name: 'ce'        , argCount: 1, argMask: [false], hasOptionalArg: true },
     { type: 'command', name: 'cite'      , argCount: 1, argMask: [false], hasOptionalArg: true },
     { type: 'command', name: 'citet'     , argCount: 1, argMask: [false], hasOptionalArg: true },
     { type: 'command', name: 'citep'     , argCount: 1, argMask: [false], hasOptionalArg: true },
@@ -91,6 +90,8 @@ export const latexPreset: LanguagePreset = {
     { type: 'command', name: 'href', argCount: 2, argMask: [false, true] },
     // \ruby{kanji}{furigana} -> read only kanji (configurable)
     { type: 'command', name: 'ruby', argCount: 2, argMask: [true, false] },
+    // Chemistry: \ce{H2O} -> read the formula
+    { type: 'command', name: 'ce', argCount: 1, argMask: [true] },
 
     // -------------------------------------------------------
     // 4. Simple Exclude Rules
@@ -112,9 +113,15 @@ export const latexPreset: LanguagePreset = {
     // Inline math \( \)
     { type: 'simple', pattern: '\\\\\\(|\\\\\\)', isRegex: true, flags: 'g' },
 
-    // Line breaks and spacing commands
+    // Line breaks
     { type: 'simple', pattern: '\\\\\\\\(\\[[^\\]]*\\])?', isRegex: true, flags: 'g' },
-    { type: 'simple', pattern: '\\\\(hspace|vspace|hfill|vfill|quad|qquad|,|;|!|\\s)\\*?(\\{[^}]*\\})?', isRegex: true, flags: 'g' },
+
+    // Named spacing commands (\hspace, \vspace, \quad, etc.)
+    { type: 'simple', pattern: '\\\\(hspace|vspace|hfill|vfill|quad|qquad)\\*?(\\{[^}]*\\})?', isRegex: true, flags: 'g' },
+    // Single-char spacing commands (\, \; \!)
+    { type: 'simple', pattern: '\\\\[,;!]', isRegex: true, flags: 'g' },
+    // Control space (backslash followed by space)
+    { type: 'simple', pattern: '\\\\ ', isRegex: true, flags: 'g' },
 
     // -------------------------------------------------------
     // 5. Replace Rules

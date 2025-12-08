@@ -106,4 +106,29 @@ export class ReadTextEngine {
     // Also stop player directly (for single-text case)
     this.player.stop();
   }
+
+  pause(): boolean {
+    // Pause pipeline if running
+    if (this.pipeline) {
+      return this.pipeline.pause();
+    }
+    // Otherwise pause player directly (for single-text case)
+    return this.player.pause();
+  }
+
+  resume(): boolean {
+    // Resume pipeline if running
+    if (this.pipeline) {
+      return this.pipeline.resume();
+    }
+    // Otherwise resume player directly (for single-text case)
+    return this.player.resume();
+  }
+
+  isPaused(): boolean {
+    if (this.pipeline) {
+      return this.pipeline.isPaused();
+    }
+    return this.player.isPaused();
+  }
 }
