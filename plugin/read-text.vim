@@ -19,11 +19,6 @@ if !exists('g:read_text_voicevox_speaker')
   let g:read_text_voicevox_speaker = 3
 endif
 
-" Backward compatibility for old variable name
-if exists('g:read_text_speaker_id') && !exists('g:read_text_voicevox_speaker')
-  let g:read_text_voicevox_speaker = g:read_text_speaker_id
-endif
-
 " espeak settings
 if !exists('g:read_text_espeak_voice')
   let g:read_text_espeak_voice = 'en'
@@ -94,18 +89,8 @@ if !exists('g:read_text_speed')
   let g:read_text_speed = 1.0
 endif
 
-" Backward compatibility for old variable name
-if exists('g:read_text_speed_scale') && !exists('g:read_text_speed')
-  let g:read_text_speed = g:read_text_speed_scale
-endif
-
 if !exists('g:read_text_pitch')
   let g:read_text_pitch = 0.0
-endif
-
-" Backward compatibility for old variable name
-if exists('g:read_text_pitch_scale') && !exists('g:read_text_pitch')
-  let g:read_text_pitch = g:read_text_pitch_scale
 endif
 
 " File management

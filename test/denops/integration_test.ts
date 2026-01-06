@@ -13,12 +13,12 @@ describe("read-text.vim integration tests", () => {
       
       // デフォルト変数が設定されていることを確認
       const voicevoxUrl = await denops.eval("g:read_text_voicevox_url");
-      const speakerId = await denops.eval("g:read_text_speaker_id");
-      const speedScale = await denops.eval("g:read_text_speed_scale");
-      
+      const voicevoxSpeaker = await denops.eval("g:read_text_voicevox_speaker");
+      const speed = await denops.eval("g:read_text_speed");
+
       assertEquals(typeof voicevoxUrl, "string");
-      assertEquals(typeof speakerId, "number");
-      assertEquals(typeof speedScale, "number");
+      assertEquals(typeof voicevoxSpeaker, "number");
+      assertEquals(typeof speed, "number");
     });
   });
 
@@ -43,19 +43,19 @@ describe("read-text.vim integration tests", () => {
     await test("nvim", "Test custom configuration", async (denops) => {
       // カスタム設定を行う
       await denops.cmd(`let g:read_text_voicevox_url = '${TEST_VOICEVOX_URL}'`);
-      await denops.cmd("let g:read_text_speaker_id = 14");
-      await denops.cmd("let g:read_text_speed_scale = 1.2");
-      
+      await denops.cmd("let g:read_text_voicevox_speaker = 14");
+      await denops.cmd("let g:read_text_speed = 1.2");
+
       await denops.cmd("runtime plugin/read-text.vim");
-      
+
       // 設定が反映されていることを確認
       const voicevoxUrl = await denops.eval("g:read_text_voicevox_url");
-      const speakerId = await denops.eval("g:read_text_speaker_id");
-      const speedScale = await denops.eval("g:read_text_speed_scale");
-      
+      const voicevoxSpeaker = await denops.eval("g:read_text_voicevox_speaker");
+      const speed = await denops.eval("g:read_text_speed");
+
       assertEquals(voicevoxUrl, TEST_VOICEVOX_URL);
-      assertEquals(speakerId, 14);
-      assertEquals(speedScale, 1.2);
+      assertEquals(voicevoxSpeaker, 14);
+      assertEquals(speed, 1.2);
     });
   });
 
